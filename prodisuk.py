@@ -1,6 +1,5 @@
 # ПроДисУК - программа дистанционного управления компьютером
 # Ссылка на бота: https://vk.com/public203031537
-# Синтаксис команд: /команда название_сессии аргументы
 # Сотников Салим, 2021.
 
 import vk_api
@@ -86,6 +85,7 @@ def get_session_name():
         data = json.load(file)
     return data["user_data"]["session_name"]
 
+
 # Классы исключений
 
 class ArgumentCountError(Exception):
@@ -104,13 +104,14 @@ class ArgumentTypeError(Exception):
 
 class Session:
     """ Класс сессии """
+
     def __init__(self):
         self.default_filepath = 'C:/Users/{}/'.format(
             os.environ.get("USERNAME"))
         self.is_run = True
 
-# feedback - параметр, обозначающий надобность ответного сообщения после выполнения команды.
-# Есть не у всех методов, надобность передачи этого параметра задаётся в словаре commands.
+    # feedback - параметр, обозначающий надобность ответного сообщения после выполнения команды.
+    # Есть не у всех методов, надобность передачи этого параметра задаётся в словаре commands.
 
     def cmd(self, event, feedback, args):
         """ Выполняет системную команду """
@@ -425,15 +426,17 @@ session = Session()
 
 class ControlPanel(QMainWindow, Ui_MainWindow):
     """ Панель управления """
+
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.addressee = None # Адресат для отправки сообщений
+        self.addressee = None  # Адресат для отправки сообщений
 
         self.setWindowTitle(
             'Панель управления - {}'.format(get_session_name()))
 
-        with open('session_data.json') as file: # Заполнение списков доверенных лиц
+        with open(
+                'session_data.json') as file:  # Заполнение списков доверенных лиц
             data = json.load(file)
         user_datas = vk.users.get(
             user_ids=data['confidants']['Administrators'])
@@ -530,7 +533,7 @@ class ControlPanel(QMainWindow, Ui_MainWindow):
         with open('session_data.json') as file:
             data = json.load(file)
         self.addressee = data['confidants']['Administrators'][
-            self.admins.currentRow()] # Адресат меняется на выбранного пользователя
+            self.admins.currentRow()]  # Адресат меняется на выбранного пользователя
         self.users.setCurrentRow(-1)
 
     def on_click_users(self):
@@ -597,7 +600,7 @@ def main(window):
             except vk_api.exceptions.ApiError:
                 pass
     for event in longpoll.listen():
-        if not session.is_run: # Это нужно для прекращения функции и корректного закрытия программы
+        if not session.is_run:  # Это нужно для прекращения функции и корректного закрытия программы
             break
         if event.type == VkBotEventType.MESSAGE_NEW:
             with open('session_data.json') as file:
