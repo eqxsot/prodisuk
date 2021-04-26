@@ -392,11 +392,11 @@ class Session:
         image_formats = ['png', 'jpeg', 'jpg', 'gif', 'bmp']
         filepath = args[0]
         if len(args) == 3:
-            x = int(args[1]) + 1
+            x = int(args[1]) - 1
             y = x + 1
         elif len(args) == 4:
-            x = int(args[1]) + 1
-            y = int(args[2]) + 1
+            x = int(args[1]) - 1
+            y = int(args[2]) - 1
         elif len(args) == 2:
             x = 0
             y = 20
