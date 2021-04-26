@@ -10,13 +10,15 @@ import random
 import datetime
 import json
 
+import requests
+
 import os
 import sys
 import platform
 
 from design import Ui_MainWindow
 from PyQt5.QtWidgets import QMainWindow, QApplication
-from PyQt5.QtWidgets import QInputDialog
+from PyQt5.QtWidgets import QInputDialog, QMessageBox
 
 import threading
 
@@ -205,11 +207,11 @@ class Session:
                 if user_id in data['confidants'][roles[role][2]]:
                     data["confidants"][roles[role][2]].remove(user_id)
                 if not feedback or (
-                                event.obj.message['from_id'] in
-                                data["confidants"][
-                                    'Administrators'] and user_id not in
-                            data["confidants"][
-                                roles[role][0]]):
+                        event.obj.message['from_id'] in
+                        data["confidants"][
+                            'Administrators'] and user_id not in
+                        data["confidants"][
+                            roles[role][0]]):
                     data["confidants"][roles[role][0]].append(user_id)
                     with open('session_data.json', 'w') as file:
                         json.dump(data, file)
@@ -253,11 +255,11 @@ class Session:
                 with open('session_data.json') as file:
                     data = json.load(file)
                 if not feedback or (
-                                event.obj.message['from_id'] in
-                                data["confidants"][
-                                    'Administrators'] and user_id in
-                            data["confidants"][
-                                roles[role][0]]):
+                        event.obj.message['from_id'] in
+                        data["confidants"][
+                            'Administrators'] and user_id in
+                        data["confidants"][
+                            roles[role][0]]):
                     data["confidants"][roles[role][0]].remove(user_id)
                     with open('session_data.json', 'w') as file:
                         json.dump(data, file)
@@ -665,10 +667,17 @@ def main(window):
 
 
 if __name__ == '__main__':
-    session = Session()
-    app = QApplication(sys.argv)
-    window = ControlPanel()
-    window.show()
-    t = MainThread(window)
-    t.start()
-    sys.exit(app.exec_())
+    try:
+        session = Session()
+        app = QApplication(sys.argv)
+        window = ControlPanel()
+        window.show()
+        t = MainThread(window)
+        t.start()
+        sys.exit(app.exec_())
+    except requests.exceptions.ConnectionError:
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Critical)
+        msg.setWindowTitle("Ошибка!")
+        msg.setText("Ошибка соединения, проверьте подключение к Интернету.")
+        msg.exec_()
