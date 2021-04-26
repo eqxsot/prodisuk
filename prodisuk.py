@@ -390,7 +390,7 @@ class Session:
 
         text_formats = ['txt', 'json', 'rtf', 'json', 'ui', 'py']
         image_formats = ['png', 'jpeg', 'jpg', 'gif', 'bmp']
-        filepath = ' '.join(args[:-1]).strip()
+        filepath = args[0]
         if len(args) == 3:
             x = int(args[1]) + 1
             y = x + 1
