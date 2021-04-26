@@ -31,4 +31,6 @@
 	PyQt5
 	threading
 Презентация будет уже во время защиты.
+
+https://disk.yandex.ru/i/ZUFH9hF5ClZ8gw
 	
