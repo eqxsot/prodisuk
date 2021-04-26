@@ -353,7 +353,7 @@ class Session:
     def dir(self, event, args):
         """ Отправляет список файлов и папок в текущей директории """
 
-        filepath = ' '.join(args)
+        filepath = ' '.join(args[:-1]).strip()
         if filepath == '':
             filepath = self.default_filepath
         elif filepath[1:3] != ':/':
@@ -367,18 +367,23 @@ class Session:
     def cd(self, event, args):
         """ Меняет текущую директорию """
 
-        filepath = ' '.join(args)
-        if filepath == '..':
-            self.default_filepath = '/'.join(
-                self.default_filepath.split('/')[:-1]) + '/'
-        else:
-            if filepath[-1] != '/':
-                filepath += '/'
-            if filepath[1:3] != ':/':
-                self.default_filepath += filepath
+        filepath = ' '.join(args[:-1]).strip()
+        try:
+            if filepath == '..':
+                self.default_filepath = '/'.join(
+                    self.default_filepath.split('/')[:-1]) + '/'
             else:
-                self.default_filepath = filepath
-        self.dir(event, [self.default_filepath])
+                if filepath[-1] != '/':
+                    filepath += '/'
+                if filepath[1:3] != ':/':
+                    self.default_filepath += filepath
+                else:
+                    self.default_filepath = filepath
+                self.dir(event, [self.default_filepath])
+        except Exception:
+            vk.messages.send(user_id=event.obj.message['from_id'],
+                             message='Неправильный путь к файлу.',
+                             random_id=random.randint(0, 2 ** 64))
 
     def open_file(self, event, args):
         """ Отправляет файл (только текстовый или графический) """
