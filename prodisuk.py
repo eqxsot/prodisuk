@@ -415,6 +415,10 @@ class Session:
                 upload = VkUpload(vk)
                 send_photo(vk, event.obj.message['from_id'],
                            *upload_photo(upload, filepath))
+            else:
+                vk.messages.send(user_id=event.obj.message['from_id'],
+                                 message='Неправильный формат файла.',
+                                 random_id=random.randint(0, 2 ** 64))
 
     def slist(self, event):
         """ Отправляет список сессий (не требует имени сессии в синтаксисе)"""
