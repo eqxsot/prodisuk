@@ -24,7 +24,7 @@ import threading
 
 import pyautogui
 
-TOKEN = 'c933c1127f5b19863fd784985cbc05cd5d0641fd27ad49078c902f4a90668cc0156f6d36b92b1bcd300d4'
+TOKEN = ''
 
 vk_session = vk_api.VkApi(
     token=TOKEN)
